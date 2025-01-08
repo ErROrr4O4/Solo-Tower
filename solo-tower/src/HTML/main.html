@@ -13,6 +13,24 @@
         <div class="shadow-line"></div>
         <button id="start-game">Login</button>
     </div>
+    <div id="welcome-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <p>Welcome Player</p>
+            <button id="ok-button">Ok</button>
+        </div>
+    </div>
+    <div id="player-info" class="player" style="display: none;">
+        <p>Player Name: <span id="player-name">Player</span></p>
+        <p>Class: <span id="player-class">None</span></p>
+        <p>Stats: <span id="player-stats">Level 1, HP: 100</span></p>
+    </div>
+    <div id="notifications" class="notifications" style="display: none;">
+        <button id="expand-notifications" class="expand-button">▲</button>
+        <div id="notifications-content" class="notifications-content">
+            <!-- Future notifications will be appended here -->
+        </div>
+        <div id="notification-counter" class="notification-counter">0</div>
+    </div>
     <script src="../JS/main.js"></script>
     <script src="../JS/MainMenu.js"></script>
 </body>
