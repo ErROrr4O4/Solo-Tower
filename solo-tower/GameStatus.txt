@@ -1,0 +1,7 @@
+✔ Font Style Update: The font style for the entire interface has been updated to use "Ysabeau SC" with the specified properties.
+✔ Title Styling: The "Solo Tower" text has been styled with a radiant blue gradient and a glowing effect.
+✔ Button Styling: The buttons' background has been made completely transparent. The buttons' border color has been set to match the "Solo Tower" text color with a gradient and glowing effect.
+✔ Shadow Line: A line has been added between the title and the buttons to create a shadow effect.
+✔ Expand Animation: An expand animation has been created to smoothly transition the main menu to fill the entire screen when the "Login" button is pressed.
+✔ JavaScript Integration: JavaScript has been added to trigger the expand animation and clear the interface after the animation completes.
+✔ HTML Update: The "Options" and "Exit" buttons have been removed, and the "Start Game" button text has been changed to "Login".
