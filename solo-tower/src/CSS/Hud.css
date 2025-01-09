@@ -1,0 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Ysabeau+SC:wght@400;700&display=swap');
+
+#hud {
+    position: absolute;
+    top: 50px;
+    left: 100px;
+    color: #ffffff; /* Black text color */
+    font-family: 'Ysabeau SC', serif; /* Updated font style */
+    font-optical-sizing: auto;
+    font-weight: 600;
+    height: 28%;
+    font-style: normal;
+    animation: slide-in 0.3s ease-out; /* Apply slide-in animation */
+    padding: 20px; /* Add padding for better spacing */
+    background-color: rgba(64, 157, 219, 0.8); /* Semi-transparent background */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Shadow for depth */
+}
+
+.bar {
+    margin: 10px 0; /* Space between bars */
+}
+
+label {
+    font-size: 1em;
+    margin-right: 10px; /* Add space between label and progress bar */
+}
+
+progress {
+    width: 100%; /* Adjust width to make space for counters */
+    height: 20px; /* Height of progress bar */
+    -webkit-appearance: none; /* Remove default styling */
+    appearance: none;
+}
+
+progress[value]::-webkit-progress-bar {
+    background-color: #e0e0e0; /* Background color of the progress bar */
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+progress[value]::-webkit-progress-value {
+    background-color: #4caf50; /* Default color of the progress bar value */
+    border-radius: 5px;
+}
+
+#health-bar::-webkit-progress-value {
+    background-color: #ff5252; /* Health bar color */
+}
+
+#mana-bar::-webkit-progress-value {
+    background-color: #42a5f5; /* Mana bar color */
+}
+
+#exp-bar::-webkit-progress-value {
+    background-color: #ffca28; /* EXP bar color */
+}
+
+.bar span {
+    margin-left: 10px; /* Space between progress bar and counter */
+    font-size: 1em;
+}

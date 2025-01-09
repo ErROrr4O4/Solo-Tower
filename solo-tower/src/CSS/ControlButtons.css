@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Ysabeau+SC:wght@400;700&display=swap');
+
+#centralized-control {
+    display: none;
+    position: absolute;
+    top: 50px;
+    right: 100px;
+    display: flex; /* Align buttons next to each other */
+    flex-direction: row; /* Ensure buttons are in a row */
+    align-items: center;
+    gap: 10px; /* Space between buttons */
+    z-index: 1000;
+    animation: slide-in 0.3s ease-out; /* Apply slide-in animation */
+}
+
+
+#centralized-control button {
+    padding: 10px 20px;
+    font-size: 1em;
+    background-color: transparent; /* Transparent background */
+    color: #ffffff; /* White text color */
+    border: 2px solid; /* Border color same as interface */
+    border-image: linear-gradient(45deg, rgba(135, 206, 250, 0.8), rgba(173, 216, 230, 0.8)) 1;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    font-family: 'Ysabeau SC', serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+#centralized-control button:hover {
+    background-color: rgba(135, 206, 250, 0.2); /* Slightly blue transparent background on hover */
+    transform: scale(1.05);
+}

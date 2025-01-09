@@ -4,8 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Solo Tower</title>
+    <link rel="stylesheet" href="../CSS/Buffs&Debuffs.css">
+    <link rel="stylesheet" href="../CSS/ControlButtons.css">
+    <link rel="stylesheet" href="../CSS/Hud.css">
+    <link rel="stylesheet" href="../CSS/LocationBox.css">
     <link rel="stylesheet" href="../CSS/main.css">
     <link rel="stylesheet" href="../CSS/MainMenu.css">
+    <link rel="stylesheet" href="../CSS/notifactions.css">
+    <link rel="stylesheet" href="../CSS/welcome.css">
 </head>
 <body>
     <div id="main-menu">
@@ -13,17 +19,37 @@
         <div class="shadow-line"></div>
         <button id="start-game">Login</button>
     </div>
+
     <div id="welcome-modal" class="modal" style="display: none;">
         <div class="modal-content">
-            <p>Welcome Player</p>
+            <p>Welcome to Solo Tower!</p>
+            <input type="text" id="player-name-input" placeholder="Enter your name" />
             <button id="ok-button">Ok</button>
         </div>
     </div>
-    <div id="player-info" class="player" style="display: none;">
-        <p>Player Name: <span id="player-name">Player</span></p>
-        <p>Class: <span id="player-class">None</span></p>
-        <p>Stats: <span id="player-stats">Level 1, HP: 100</span></p>
+
+    <div id="hud" style="display: none;">
+        <p> <span id="player-name">Player</span> (Lv. <span id="player-level">1</span>)</p>
+        <div class="bar">
+            <label for="health-bar">Health: <span id="health-counter">100/100</span></label>
+            <progress id="health-bar" value="100" max="100"></progress>
+        </div>
+        <div class="bar">
+            <label for="mana-bar">Mana: <span id="mana-counter">100/100</span></label>
+            <progress id="mana-bar" value="100" max="100"></progress>
+        </div>
+        <div class="bar">
+            <label for="exp-bar">EXP: <span id="exp-counter">0/100</span></label>
+            <progress id="exp-bar" value="0" max="100"></progress>
+        </div>
     </div>
+
+    <div id="centralized-control" style="display: none;">
+        <button id="inventory-button">Inventory</button>
+        <button id="quests-button">Quests</button>
+        <button id="settings-button">Settings</button>
+    </div>
+
     <div id="notifications" class="notifications" style="display: none;">
         <button id="expand-notifications" class="expand-button">▲</button>
         <div id="notifications-content" class="notifications-content">
@@ -31,6 +57,18 @@
         </div>
         <div id="notification-counter" class="notification-counter">0</div>
     </div>
+
+    <div id="location-box" class="location-box" style="display: none;">
+        <p id="location-name">???</p>
+    </div>
+
+    <div id="buffs-debuffs-box" class="buffs-debuffs-box">
+        <div id="buffs-list"></div>
+        <div id="debuffs-list"></div>
+    </div>
+
+    
+
     <script src="../JS/main.js"></script>
     <script src="../JS/MainMenu.js"></script>
 </body>

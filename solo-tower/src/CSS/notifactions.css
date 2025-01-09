@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Ysabeau+SC:wght@400;700&display=swap');
+
+.notifications {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    width: 20%; /* Ensure it adheres to the 90% width guideline */
+    max-height: 90%; /* Ensure it adheres to the 90% height guideline */
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+.notifications {
+    background: linear-gradient(135deg, rgba(135, 206, 250, 0.5), rgba(173, 216, 230, 0.5)); /* Gradient background */
+    color: #ffffff; /* White text color */
+    padding: 20px; /* Add padding to match the interface */
+}
+
+.notifications {
+    border: 10px solid; /* Increased border size */
+    border-image: linear-gradient(45deg, rgba(0, 0, 255, 0.8), rgba(0, 255, 255, 0.8)) 1;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Match the box-shadow style */
+}
+
+.notifications {
+    font-family: 'Ysabeau SC', serif; /* Updated font style */
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.notifications {
+    animation: slide-in 1s ease-out; /* Apply slide-in animation */
+}
+
+@keyframes slide-in {
+    0% {
+        transform: translateY(-30%);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+
+.notifications-content {
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.expand-button {
+    background-color: transparent;
+    border: none;
+    color: #ffffff;
+    cursor: pointer;
+    font-size: 1.2em;
+    margin-bottom: 5px;
+}
+
+.notification {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.1); /* Slightly transparent white background */
+    border-radius: 3px;
+    animation: fade-in 0.5s ease-out;
+    position: relative;
+}
+
+.notification .close-notification {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+.notification.stacked {
+    display: none; /* Initially hide stacked notifications */
+}
+
+.notification-counter {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    background-color: #ff0000; /* Red background */
+    color: #ffffff; /* White text color */
+    border-radius: 50%;
+    padding: 5px 10px;
+    font-size: 20px;
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}

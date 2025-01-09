@@ -5,18 +5,38 @@ document.getElementById('start-game').addEventListener('click', function() {
     setTimeout(() => {
         mainMenu.innerHTML = ''; // Clear the entire interface after the animation
         welcomeModal.style.display = 'block'; // Show the welcome modal
-    }, 0); // Set the duration to 0
+    }, 1000); // Adjusted delay to match animation duration
 });
 
 document.getElementById('ok-button').addEventListener('click', function() {
     const welcomeModal = document.getElementById('welcome-modal');
-    const playerInfo = document.getElementById('player-info');
+    const hud = document.getElementById('hud'); // Reference the HUD element
     const notifications = document.getElementById('notifications');
+    const centralizedControl = document.getElementById('centralized-control'); // Reference the centralized control element
+    const locationBox = document.getElementById('location-box'); // Reference the location box element
+    const playerNameInput = document.getElementById('player-name-input').value.trim();
+
+    if (playerNameInput === "") {
+        alert("Please enter your name!");
+        return;
+    }
+
+    document.getElementById('player-name').textContent = playerNameInput;
+    document.getElementById('player-level').textContent = "1"; // Set initial player level
+    document.getElementById('health-counter').textContent = "100/100"; // Set initial health counter
+    document.getElementById('mana-counter').textContent = "100/100"; // Set initial mana counter
+    document.getElementById('exp-counter').textContent = "0/100"; // Set initial exp counter
+
     welcomeModal.style.display = 'none'; // Hide the welcome modal
-    playerInfo.style.display = 'block'; // Display the player's name, class, and stats
+    hud.style.display = 'block'; // Display the HUD with player name, level, health, mana, and exp bars
     notifications.style.display = 'block'; // Display the notifications box
-    showNotification('Welcome to the game, Player!');
+    centralizedControl.style.display = 'flex'; // Show the centralized controls
+    locationBox.style.display = 'block'; // Display the location box
+    showNotification(`Welcome to the tower, ${playerNameInput}!`);
 });
+
+
+
 
 document.getElementById('expand-notifications').addEventListener('click', function() {
     const notificationsContent = document.getElementById('notifications-content');
@@ -66,3 +86,35 @@ function showNotification(message) {
         notification.classList.add('stacked'); // Mark it as stacked
     }, 5000);
 }
+
+// Function to show buffs/debuffs
+function showBuffsDebuffs(buffs, debuffs) {
+    const buffsDebuffsBox = document.getElementById('buffs-debuffs-box');
+    const buffsList = document.getElementById('buffs-list');
+    const debuffsList = document.getElementById('debuffs-list');
+    
+    // Clear current buffs and debuffs
+    buffsList.innerHTML = '';
+    debuffsList.innerHTML = '';
+
+    // Add new buffs
+    buffs.forEach(buff => {
+        const buffElement = document.createElement('div');
+        buffElement.className = 'buff';
+        buffElement.textContent = buff;
+        buffsList.appendChild(buffElement);
+    });
+
+    // Add new debuffs
+    debuffs.forEach(debuff => {
+        const debuffElement = document.createElement('div');
+        debuffElement.className = 'debuff';
+        debuffElement.textContent = debuff;
+        debuffsList.appendChild(debuffElement);
+    });
+
+    buffsDebuffsBox.style.display = 'block'; // Show the box
+}
+// Call this function whenever the player gets a buff or debuff
+// updateBuffsDebuffs(); // Uncomment this line to test the function
+
