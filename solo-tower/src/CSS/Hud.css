@@ -9,12 +9,16 @@
     font-optical-sizing: auto;
     font-weight: 600;
     height: 28%;
+    border: 5px solid;
+    border-image: linear-gradient(45deg, rgba(0, 0, 255, 0.8), rgba(0, 255, 255, 0.8)) 1;
+    border-radius: 10px;
     font-style: normal;
     animation: slide-in 0.3s ease-out; /* Apply slide-in animation */
     padding: 20px; /* Add padding for better spacing */
     background-color: rgba(64, 157, 219, 0.8); /* Semi-transparent background */
-    border-radius: 10px; /* Rounded corners */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Shadow for depth */
+    animation: borderAnimation 1.5s infinite alternate, backgroundAnimation 5s infinite alternate;
+    width: 10%;
 }
 
 .bar {
@@ -59,4 +63,22 @@ progress[value]::-webkit-progress-value {
 .bar span {
     margin-left: 10px; /* Space between progress bar and counter */
     font-size: 1em;
+}
+
+@keyframes borderAnimation {
+    0% {
+        border-image: linear-gradient(45deg, rgba(0, 0, 255, 0.8), rgba(0, 255, 255, 0.8)) 1;
+    }
+    100% {
+        border-image: linear-gradient(45deg, rgba(0, 255, 255, 0.8), rgba(0, 0, 255, 0.8)) 1;
+    }
+}
+
+@keyframes backgroundAnimation {
+    0% {
+        background: linear-gradient(135deg, rgba(135, 206, 250, 0.5), rgba(173, 216, 230, 0.5));
+    }
+    100% {
+        background: linear-gradient(135deg, rgba(173, 216, 230, 0.5), rgba(135, 206, 250, 0.5));
+    }
 }

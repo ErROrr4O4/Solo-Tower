@@ -29,6 +29,8 @@
     font-weight: 400;
     font-style: normal;
     animation: slide-in 1s ease-out; /* Apply slide-in animation */
+    animation: borderAnimation 1.5s infinite alternate, backgroundAnimation 5s infinite alternate;
+
 }
 
 @keyframes slide-in {
@@ -61,6 +63,7 @@
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Shadow for depth */
 }
 
 .modal-content button:hover {
@@ -84,4 +87,22 @@
 
 .modal-content input:focus {
     border-color: rgba(135, 206, 250, 1);
+}
+
+@keyframes borderAnimation {
+    0% {
+        border-image: linear-gradient(45deg, rgba(0, 0, 255, 0.8), rgba(0, 255, 255, 0.8)) 1;
+    }
+    100% {
+        border-image: linear-gradient(45deg, rgba(0, 255, 255, 0.8), rgba(0, 0, 255, 0.8)) 1;
+    }
+}
+
+@keyframes backgroundAnimation {
+    0% {
+        background: linear-gradient(135deg, rgba(135, 206, 250, 0.5), rgba(173, 216, 230, 0.5));
+    }
+    100% {
+        background: linear-gradient(135deg, rgba(173, 216, 230, 0.5), rgba(135, 206, 250, 0.5));
+    }
 }

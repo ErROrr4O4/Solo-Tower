@@ -12,8 +12,12 @@ document.getElementById('ok-button').addEventListener('click', function() {
     const welcomeModal = document.getElementById('welcome-modal');
     const hud = document.getElementById('hud'); // Reference the HUD element
     const notifications = document.getElementById('notifications');
+    const buffsDebuffsBox = document.getElementById('buffs-debuffs-box'); // Reference the buffs/debuffs box element
     const centralizedControl = document.getElementById('centralized-control'); // Reference the centralized control element
     const locationBox = document.getElementById('location-box'); // Reference the location box element
+    const goldBox = document.getElementById('gold-box'); // Reference the gold box element
+    const gameContainer = document.getElementById('game-container'); // Reference the game container element
+    const upgradeTree = document.getElementById('upgrade-tree'); // Reference the upgrade tree element
     const playerNameInput = document.getElementById('player-name-input').value.trim();
 
     if (playerNameInput === "") {
@@ -30,13 +34,16 @@ document.getElementById('ok-button').addEventListener('click', function() {
     welcomeModal.style.display = 'none'; // Hide the welcome modal
     hud.style.display = 'block'; // Display the HUD with player name, level, health, mana, and exp bars
     notifications.style.display = 'block'; // Display the notifications box
+    buffsDebuffsBox.style.display = 'block'; // Show the box
     centralizedControl.style.display = 'flex'; // Show the centralized controls
+    goldBox.style.display = 'block'; // Show the gold box
     locationBox.style.display = 'block'; // Display the location box
+    gameContainer.style.display = 'block'; // Show the game container
+    upgradeTree.style.display = 'block'; // Show the upgrade tree
     showNotification(`Welcome to the tower, ${playerNameInput}!`);
+
+    spawnEnemies(); // Start spawning enemies
 });
-
-
-
 
 document.getElementById('expand-notifications').addEventListener('click', function() {
     const notificationsContent = document.getElementById('notifications-content');
@@ -113,8 +120,113 @@ function showBuffsDebuffs(buffs, debuffs) {
         debuffsList.appendChild(debuffElement);
     });
 
-    buffsDebuffsBox.style.display = 'block'; // Show the box
 }
 // Call this function whenever the player gets a buff or debuff
 // updateBuffsDebuffs(); // Uncomment this line to test the function
 
+function createEnemy() {
+    const gameContainer = document.querySelector('.game-container');
+    const enemy = document.createElement('div');
+    enemy.className = 'enemy';
+
+    const randomEdge = Math.floor(Math.random() * 4);
+    switch(randomEdge) {
+        case 0: // Top edge
+            enemy.style.top = '0';
+            enemy.style.left = `${Math.random() * 100}%`;
+            break;
+        case 1: // Right edge
+            enemy.style.top = `${Math.random() * 100}%`;
+            enemy.style.left = '100%';
+            break;
+        case 2: // Bottom edge
+            enemy.style.top = '100%';
+            enemy.style.left = `${Math.random() * 100}%`;
+            break;
+        case 3: // Left edge
+            enemy.style.top = `${Math.random() * 100}%`;
+            enemy.style.left = '0';
+            break;
+    }
+
+    gameContainer.appendChild(enemy);
+
+    // Move the enemy toward the player
+    moveEnemy(enemy);
+}
+
+function moveEnemy(enemy) {
+    const player = document.querySelector('.player');
+    const playerRect = player.getBoundingClientRect();
+    const enemyRect = enemy.getBoundingClientRect();
+
+    const deltaX = playerRect.left - enemyRect.left;
+    const deltaY = playerRect.top - enemyRect.top;
+    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+    const duration = 2000; // Duration for the enemy to reach the player
+
+    enemy.style.transition = `transform ${duration}ms linear`;
+    enemy.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+
+    // Remove enemy after it reaches the player
+    setTimeout(() => {
+        enemy.remove();
+        earnResources(); // Earn resources when enemy is removed
+    }, duration);
+}
+
+function earnResources() {
+    gold += 10; // Amount of gold earned per enemy
+    experience += 5; // Amount of experience earned per enemy
+    updateResources();
+    updateExpBar(); // Update EXP bar after earning resources
+}
+
+function updateExpBar() {
+    const expCounter = document.getElementById('exp-counter');
+    const currentExp = experience % 100; // Assuming 100 EXP is needed to level up
+    expCounter.textContent = `${currentExp}/100`; // Update EXP bar display
+}
+
+// Function to update resource display
+function updateResources() {
+    document.getElementById('gold-counter').textContent = `Gold: ${gold}`;
+    document.getElementById('exp-counter').textContent = `EXP: ${experience}`;
+}
+
+// Set initial resources
+let gold = 0;
+let experience = 0;
+
+// Call updateResources initially to set the counters
+updateResources();
+
+function spawnEnemies() {
+    setInterval(createEnemy, 1000); // Spawn a new enemy every second
+}
+
+// Function to unlock upgrades based on player level or points
+function checkForUpgrades() {
+    const playerLevel = parseInt(document.getElementById('player-level').textContent, 10);
+
+    if (playerLevel >= 2) {
+        unlockUpgrade('upgrade-1');
+    }
+    if (playerLevel >= 3) {
+        unlockUpgrade('upgrade-2');
+    }
+    if (playerLevel >= 4) {
+        unlockUpgrade('upgrade-3');
+    }
+    // Add more conditions for additional upgrades
+}
+
+function unlockUpgrade(upgradeId) {
+    const upgrade = document.getElementById(upgradeId);
+    upgrade.classList.remove('locked');
+    upgrade.classList.add('unlocked');
+}
+
+// Call checkForUpgrades whenever the player levels up or earns points
+// Example: checkForUpgrades(); // Call this function at appropriate times

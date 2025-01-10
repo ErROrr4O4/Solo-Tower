@@ -51,6 +51,7 @@
         margin: 0;
         padding: 0;
         border-radius: 0;
+        
     }
     100% {
         width: 90%;
@@ -59,10 +60,11 @@
         margin: 0;
         padding: 0;
         border-radius: 0;
+        
     }
 }
 
-#main-menu.expand-animation {
+#main-menu.expand-animation{
     animation: expand 1.5s forwards; /* Slow down the animation */
 }
 
@@ -137,6 +139,7 @@
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Shadow for depth */
 }
 
 #main-menu button:hover {

@@ -1,10 +1,12 @@
-#buffs-debuffs-box {
+@import url('https://fonts.googleapis.com/css2?family=Ysabeau+SC:wght@400;700&display=swap');
+
+.game-container {
     position: absolute;
-    top: 50px; /* Position between the HUD and location box */
-    left: 20%;
+    width: 400px;
+    height: 400px;
     background: linear-gradient(135deg, rgba(135, 206, 250, 0.5), rgba(173, 216, 230, 0.5)); /* Gradient background */
     color: #ffffff; /* White text color */
-    padding: 10px 20px;
+    padding: 10px;
     border: 5px solid;
     border-image: linear-gradient(45deg, rgba(0, 0, 255, 0.8), rgba(0, 255, 255, 0.8)) 1;
     border-radius: 10px;
@@ -13,27 +15,33 @@
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
-    z-index: 999;
+    z-index: 1000;
     text-align: center;
-    display: none; /* Hidden by default */
     animation: slide-in 0.5s ease-out;
+    margin-top: 20px; /* Adjust as needed */
     animation: borderAnimation 1.5s infinite alternate, backgroundAnimation 5s infinite alternate;
 
 }
 
-.buff,
-.debuff {
-    margin: 5px 0; /* Space between buffs/debuffs */
-    padding: 5px 10px;
-    border-radius: 5px;
+.player, .enemy {
+    position: absolute;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Shadow for depth */
 }
 
-.buff {
-    background-color: rgba(0, 255, 0, 0.3); /* Light green background for buffs */
+.player {
+    background-color: white;
+    width: 20px;
+    height: 20px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
-.debuff {
-    background-color: rgba(255, 0, 0, 0.3); /* Light red background for debuffs */
+.enemy {
+    background-color: red;
+    width: 10px;
+    height: 10px;
 }
 
 @keyframes borderAnimation {
@@ -53,3 +61,4 @@
         background: linear-gradient(135deg, rgba(173, 216, 230, 0.5), rgba(135, 206, 250, 0.5));
     }
 }
+

@@ -11,6 +11,7 @@
     gap: 10px; /* Space between buttons */
     z-index: 1000;
     animation: slide-in 0.3s ease-out; /* Apply slide-in animation */
+
 }
 
 
@@ -24,13 +25,34 @@
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s, transform 0.3s;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Shadow for depth */
     font-family: 'Ysabeau SC', serif;
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
+    animation: borderAnimation 1.5s infinite alternate, backgroundAnimation 5s infinite alternate;
+
 }
 
 #centralized-control button:hover {
     background-color: rgba(135, 206, 250, 0.2); /* Slightly blue transparent background on hover */
     transform: scale(1.05);
+}
+
+@keyframes borderAnimation {
+    0% {
+        border-image: linear-gradient(45deg, rgba(0, 0, 255, 0.8), rgba(0, 255, 255, 0.8)) 1;
+    }
+    100% {
+        border-image: linear-gradient(45deg, rgba(0, 255, 255, 0.8), rgba(0, 0, 255, 0.8)) 1;
+    }
+}
+
+@keyframes backgroundAnimation {
+    0% {
+        background: linear-gradient(135deg, rgba(135, 206, 250, 0.5), rgba(173, 216, 230, 0.5));
+    }
+    100% {
+        background: linear-gradient(135deg, rgba(173, 216, 230, 0.5), rgba(135, 206, 250, 0.5));
+    }
 }

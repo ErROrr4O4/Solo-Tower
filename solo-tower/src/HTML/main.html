@@ -6,11 +6,14 @@
     <title>Solo Tower</title>
     <link rel="stylesheet" href="../CSS/Buffs&Debuffs.css">
     <link rel="stylesheet" href="../CSS/ControlButtons.css">
+    <link rel="stylesheet" href="../CSS/GameContainter.css">
     <link rel="stylesheet" href="../CSS/Hud.css">
     <link rel="stylesheet" href="../CSS/LocationBox.css">
     <link rel="stylesheet" href="../CSS/main.css">
     <link rel="stylesheet" href="../CSS/MainMenu.css">
     <link rel="stylesheet" href="../CSS/notifactions.css">
+    <link rel="stylesheet" href="../CSS/resourcebox.css">
+    <link rel="stylesheet" href="../CSS/Upgrades.css">
     <link rel="stylesheet" href="../CSS/welcome.css">
 </head>
 <body>
@@ -45,8 +48,7 @@
     </div>
 
     <div id="centralized-control" style="display: none;">
-        <button id="inventory-button">Inventory</button>
-        <button id="quests-button">Quests</button>
+        <button id="stats-button">Stats</button>
         <button id="settings-button">Settings</button>
     </div>
 
@@ -62,10 +64,30 @@
         <p id="location-name">???</p>
     </div>
 
-    <div id="buffs-debuffs-box" class="buffs-debuffs-box">
+    <div id="buffs-debuffs-box" class="buffs-debuffs-box" style="display: none;">
         <div id="buffs-list"></div>
         <div id="debuffs-list"></div>
     </div>
+
+    <div class="game-container" id="game-container" style="display: none;">
+        <div class="player"></div>
+    </div>
+    
+    <div id="upgrade-tree" class="upgrade-tree">
+        <h3>Upgrade Tree</h3>
+        <div class="upgrade" id="upgrade-1">Upgrade 1</div>
+        <div class="upgrade" id="upgrade-2">Upgrade 2</div>
+        <div class="upgrade" id="upgrade-3">Upgrade 3</div>
+        <!-- Add more upgrades as needed -->
+    </div>
+
+    <div id="gold-box" class="resource-box">
+        <h3>Gold</h3>
+        <div id="gold-counter">Gold: 0</div>
+    </div>
+    
+    
+    
 
     
 
