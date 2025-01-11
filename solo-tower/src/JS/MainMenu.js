@@ -41,9 +41,9 @@ document.getElementById('ok-button').addEventListener('click', function() {
     gameContainer.style.display = 'block'; // Show the game container
     upgradeTree.style.display = 'block'; // Show the upgrade tree
     showNotification(`Welcome to the tower, ${playerNameInput}!`);
-
-    spawnEnemies(); // Start spawning enemies
+    showNotification(`Do you wish to start the tutorial? <button class="yes-button">YES</button>`);
 });
+
 
 document.getElementById('expand-notifications').addEventListener('click', function() {
     const notificationsContent = document.getElementById('notifications-content');
@@ -75,7 +75,19 @@ function showNotification(message) {
     const notificationCounter = document.getElementById('notification-counter');
     const notification = document.createElement('div');
     notification.className = 'notification';
-    notification.innerHTML = `${message} <button class="close-notification">✖</button>`;
+    
+    // Conditionally include the "YES" button for the tutorial notification
+    if (message.includes('Do you wish to start the tutorial?')) {
+        notification.innerHTML = `${message}<button class="close-notification">✖</button>`;
+        notification.querySelector('.yes-button').addEventListener('click', function() {
+            showNotification('Tutorial started!');
+            notification.remove(); // Remove the message when "YES" is clicked
+            spawnEnemies(); // Start spawning enemies when "YES" is clicked
+        });
+    } else {
+        notification.innerHTML = `${message} <button class="close-notification">✖</button>`;
+    }
+
     notificationsContent.appendChild(notification);
 
     // Update the notification counter
@@ -93,6 +105,8 @@ function showNotification(message) {
         notification.classList.add('stacked'); // Mark it as stacked
     }, 5000);
 }
+
+
 
 // Function to show buffs/debuffs
 function showBuffsDebuffs(buffs, debuffs) {
@@ -155,6 +169,78 @@ function createEnemy() {
     moveEnemy(enemy);
 }
 
+function createChunks(enemy) {
+    const chunks = [];
+    const gameContainer = document.querySelector('.game-container');
+    const enemyRect = enemy.getBoundingClientRect();
+    const playerRect = document.querySelector('.player').getBoundingClientRect();
+    const containerRect = gameContainer.getBoundingClientRect();
+
+    for (let i = 0; i < 10; i++) { // Create 10 chunks
+        const chunk = document.createElement('div');
+        chunk.className = 'chunk';
+        // Random direction and distance for each chunk
+        const angle = Math.random() * 2 * Math.PI;
+        const distance = Math.random() * 50;
+        chunk.style.setProperty('--x', `${Math.cos(angle) * distance}px`);
+        chunk.style.setProperty('--y', `${Math.sin(angle) * distance}px`);
+        // Position chunks at enemy's location
+        chunk.style.left = `${enemyRect.left - containerRect.left + enemyRect.width / 2}px`;
+        chunk.style.top = `${enemyRect.top - containerRect.top + enemyRect.height / 2}px`;
+        chunks.push(chunk);
+        gameContainer.appendChild(chunk);
+
+    }
+    return chunks;
+}
+
+function applyDamage(damage) {
+    // Update player's health
+    const healthCounter = document.getElementById('health-counter');
+    let [currentHealth, maxHealth] = healthCounter.textContent.split('/').map(Number);
+    currentHealth = Math.max(0, currentHealth - damage); // Ensure health doesn't go below 0
+    healthCounter.textContent = `${currentHealth}/${maxHealth}`;
+    
+    // Flash effect
+    const playerElement = document.querySelector('.player');
+    playerElement.classList.add('flash');
+    setTimeout(() => {
+        playerElement.classList.remove('flash');
+    }, 500); // Duration of the flash effect
+
+}
+
+function earnResources() {
+    gold += 10; // Amount of gold earned per enemy
+    experience += 5; // Amount of experience earned per enemy
+    updateResources();
+    updateExpBar(); // Update EXP bar after earning resources
+}
+
+function updateResources() {
+    document.getElementById('gold-counter').textContent = `Gold: ${gold}`;
+    document.getElementById('exp-counter').textContent = `EXP: ${experience}`;
+}
+
+function updateExpBar() {
+    const expCounter = document.getElementById('exp-counter');
+    const currentExp = experience % 100; // Assuming 100 EXP is needed to level up
+    expCounter.textContent = `${currentExp}/100`; // Update EXP bar display
+}
+
+// Initial resource setup
+let gold = 0;
+let experience = 0;
+
+// Call updateResources initially to set the counters
+updateResources();
+
+// Debugging: Log resource updates
+function debugEarnResources() {
+    console.log('Earned resources:', { gold, experience });
+}
+
+// Update the moveEnemy function to debug earnResources
 function moveEnemy(enemy) {
     const player = document.querySelector('.player');
     const playerRect = player.getBoundingClientRect();
@@ -169,38 +255,19 @@ function moveEnemy(enemy) {
     enemy.style.transition = `transform ${duration}ms linear`;
     enemy.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
 
-    // Remove enemy after it reaches the player
+    // Apply damage and create explosion effect when enemy reaches the player
     setTimeout(() => {
-        enemy.remove();
+        const chunks = createChunks(enemy); // Create chunks for explosion
+        enemy.remove(); // Remove the enemy
+        setTimeout(() => {
+            chunks.forEach(chunk => chunk.remove()); // Remove chunks after explosion
+        }, 1000); // Duration of the explosion and fade-out effect
+        applyDamage(10); // Apply damage to the player
         earnResources(); // Earn resources when enemy is removed
+        debugEarnResources(); // Log resource updates
     }, duration);
 }
 
-function earnResources() {
-    gold += 10; // Amount of gold earned per enemy
-    experience += 5; // Amount of experience earned per enemy
-    updateResources();
-    updateExpBar(); // Update EXP bar after earning resources
-}
-
-function updateExpBar() {
-    const expCounter = document.getElementById('exp-counter');
-    const currentExp = experience % 100; // Assuming 100 EXP is needed to level up
-    expCounter.textContent = `${currentExp}/100`; // Update EXP bar display
-}
-
-// Function to update resource display
-function updateResources() {
-    document.getElementById('gold-counter').textContent = `Gold: ${gold}`;
-    document.getElementById('exp-counter').textContent = `EXP: ${experience}`;
-}
-
-// Set initial resources
-let gold = 0;
-let experience = 0;
-
-// Call updateResources initially to set the counters
-updateResources();
 
 function spawnEnemies() {
     setInterval(createEnemy, 1000); // Spawn a new enemy every second

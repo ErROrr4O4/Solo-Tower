@@ -2,10 +2,10 @@
 
 .upgrade-tree {
     position: absolute;
-    top: 200px;
+    top: 150px;
     right: 100px; 
-    width: 300px;
-    height: 300px;
+    width: 400px;
+    height: 400px;
     background: linear-gradient(135deg, rgba(135, 206, 250, 0.5), rgba(173, 216, 230, 0.5)); /* Gradient background */
     color: #ffffff; /* White text color */
     padding: 10px 20px;
@@ -17,7 +17,6 @@
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
-    z-index: 1000;
     text-align: center;
     display: none; /* Initially hidden */
     animation: borderAnimation 1.5s infinite alternate, backgroundAnimation 5s infinite alternate;

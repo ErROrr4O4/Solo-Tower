@@ -2,9 +2,9 @@
 
 .resource-box {
     position: absolute;
-    top: 190px;
-    left: 20%;
-    width: 200px;
+    top: 150px;
+    left: 320px;
+    width: 180px;
     background: linear-gradient(135deg, rgba(135, 206, 250, 0.5), rgba(173, 216, 230, 0.5)); /* Gradient background */
     color: #ffffff; /* White text color */
     padding: 10px 20px;
