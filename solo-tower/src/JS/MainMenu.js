@@ -197,9 +197,14 @@ function createChunks(enemy) {
 function applyDamage(damage) {
     // Update player's health
     const healthCounter = document.getElementById('health-counter');
+    const healthBar = document.getElementById('health-bar'); // Assuming there is a health bar element
     let [currentHealth, maxHealth] = healthCounter.textContent.split('/').map(Number);
     currentHealth = Math.max(0, currentHealth - damage); // Ensure health doesn't go below 0
     healthCounter.textContent = `${currentHealth}/${maxHealth}`;
+    
+    // Update health bar width
+    const healthPercentage = (currentHealth / maxHealth) * 100;
+    healthBar.style.width = `${healthPercentage}%`;
     
     // Flash effect
     const playerElement = document.querySelector('.player');
@@ -210,6 +215,8 @@ function applyDamage(damage) {
 
 }
 
+
+
 function earnResources() {
     gold += 10; // Amount of gold earned per enemy
     experience += 5; // Amount of experience earned per enemy
@@ -219,13 +226,27 @@ function earnResources() {
 
 function updateResources() {
     document.getElementById('gold-counter').textContent = `Gold: ${gold}`;
-    document.getElementById('exp-counter').textContent = `EXP: ${experience}`;
+    // Ensure that EXP counter text is correctly initialized if it doesn't exist
+    if (!document.getElementById('exp-counter').textContent.includes('/')) {
+        document.getElementById('exp-counter').textContent = '0/100';
+    }
+    updateExpBar();
 }
 
 function updateExpBar() {
     const expCounter = document.getElementById('exp-counter');
-    const currentExp = experience % 100; // Assuming 100 EXP is needed to level up
-    expCounter.textContent = `${currentExp}/100`; // Update EXP bar display
+    let [currentExp, maxExp] = expCounter.textContent.split('/').map(Number);
+    currentExp += 5; // Add the earned experience points
+    // If currentExp exceeds maxExp, handle level-up logic here (optional)
+    if (currentExp >= maxExp) {
+        currentExp = currentExp % maxExp; // Reset currentExp if it exceeds maxExp
+    }
+    expCounter.textContent = `${currentExp}/${maxExp}`;
+    
+    // Update exp bar width
+    const expPercentage = (currentExp / maxExp) * 100;
+    const expBar = document.getElementById('exp-bar');
+    expBar.style.width = `${expPercentage}%`;
 }
 
 // Initial resource setup
@@ -234,6 +255,7 @@ let experience = 0;
 
 // Call updateResources initially to set the counters
 updateResources();
+
 
 // Debugging: Log resource updates
 function debugEarnResources() {
