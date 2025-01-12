@@ -8,10 +8,23 @@ document.getElementById('start-game').addEventListener('click', function() {
     }, 1000); // Adjusted delay to match animation duration
 });
 
+document.getElementById('player-yes').addEventListener('click', function() {
+    const nameInputContainer = document.getElementById('name-input-container');
+    const danger = document.getElementById('danger');
+    nameInputContainer.style.display = 'block'; // Show the name input and OK button
+    danger.style.display = 'block'; // Show the danger warning
+});
+
+document.getElementById('player-no').addEventListener('click', function() {
+    alert('Alright! Feel free to explore the tower as a visitor.');
+    // Optionally, hide the welcome modal or add other logic here
+});
+
 document.getElementById('ok-button').addEventListener('click', function() {
     const welcomeModal = document.getElementById('welcome-modal');
     const hud = document.getElementById('hud'); // Reference the HUD element
     const notifications = document.getElementById('notifications');
+    const playerStats = document.getElementById('stats-box');
     const buffsDebuffsBox = document.getElementById('buffs-debuffs-box'); // Reference the buffs/debuffs box element
     const centralizedControl = document.getElementById('centralized-control'); // Reference the centralized control element
     const locationBox = document.getElementById('location-box'); // Reference the location box element
@@ -27,13 +40,14 @@ document.getElementById('ok-button').addEventListener('click', function() {
 
     document.getElementById('player-name').textContent = playerNameInput;
     document.getElementById('player-level').textContent = "1"; // Set initial player level
-    document.getElementById('health-counter').textContent = "100/100"; // Set initial health counter
-    document.getElementById('mana-counter').textContent = "100/100"; // Set initial mana counter
-    document.getElementById('exp-counter').textContent = "0/100"; // Set initial exp counter
+    document.getElementById('health-counter').textContent = "10/10"; // Set initial health counter
+    document.getElementById('mana-counter').textContent = "10/10"; // Set initial mana counter
+    document.getElementById('exp-counter').textContent = "0/10"; // Set initial exp counter
 
     welcomeModal.style.display = 'none'; // Hide the welcome modal
     hud.style.display = 'block'; // Display the HUD with player name, level, health, mana, and exp bars
     notifications.style.display = 'block'; // Display the notifications box
+    playerStats.style.display = 'block'; // Display the notifications box
     buffsDebuffsBox.style.display = 'block'; // Show the box
     centralizedControl.style.display = 'flex'; // Show the centralized controls
     goldBox.style.display = 'block'; // Show the gold box
@@ -51,7 +65,7 @@ document.getElementById('expand-notifications').addEventListener('click', functi
     const notificationCounter = document.getElementById('notification-counter');
     if (notificationsContent.style.maxHeight === '150px' || notificationsContent.style.maxHeight === '') {
         notificationsContent.style.maxHeight = '300px';
-        expandButton.textContent = '▼'; // Change to downwards arrow
+        expandButton.textContent = '▼ Inbox'; // Change to downwards arrow
         // Show all stacked notifications
         const stackedNotifications = document.querySelectorAll('.notification.stacked');
         stackedNotifications.forEach(notification => {
@@ -61,7 +75,7 @@ document.getElementById('expand-notifications').addEventListener('click', functi
         notificationCounter.textContent = '0';
     } else {
         notificationsContent.style.maxHeight = '150px';
-        expandButton.textContent = '▲'; // Change to upwards arrow
+        expandButton.textContent = '▲ Inbox'; // Change to upwards arrow
         // Hide all stacked notifications
         const stackedNotifications = document.querySelectorAll('.notification.stacked');
         stackedNotifications.forEach(notification => {
@@ -228,7 +242,7 @@ function updateResources() {
     document.getElementById('gold-counter').textContent = `Gold: ${gold}`;
     // Ensure that EXP counter text is correctly initialized if it doesn't exist
     if (!document.getElementById('exp-counter').textContent.includes('/')) {
-        document.getElementById('exp-counter').textContent = '0/100';
+        document.getElementById('exp-counter').textContent = '0/10';
     }
     updateExpBar();
 }
@@ -319,3 +333,84 @@ function unlockUpgrade(upgradeId) {
 
 // Call checkForUpgrades whenever the player levels up or earns points
 // Example: checkForUpgrades(); // Call this function at appropriate times
+
+// Initial player stats
+let playerStats = {
+    vit: 1,
+    int: 1,
+    str: 1,
+    agi: 1,
+    luck: 1,
+    maxHealth: 10,
+    maxMana: 10,
+    damageReduction: 0,
+    dodgeChance: 0,
+    resourceGain: 0
+};
+
+// Update stats display
+function updateStats() {
+    document.getElementById('vit-value').textContent = playerStats.vit;
+    document.getElementById('int-value').textContent = playerStats.int;
+    document.getElementById('str-value').textContent = playerStats.str;
+    document.getElementById('agi-value').textContent = playerStats.agi;
+    document.getElementById('luck-value').textContent = playerStats.luck;
+}
+
+// Event listeners for plus buttons
+document.getElementById('vit-plus').addEventListener('click', function() {
+    playerStats.vit++;
+    playerStats.maxHealth += 10;
+    updateStats();
+    updateHealthBar(); // Update the health bar
+});
+
+document.getElementById('int-plus').addEventListener('click', function() {
+    playerStats.int++;
+    playerStats.maxMana += 10;
+    updateStats();
+    updateManaBar(); // Update the mana bar
+});
+
+document.getElementById('str-plus').addEventListener('click', function() {
+    playerStats.str++;
+    playerStats.damageReduction = playerStats.str; // 1% damage reduction per STR
+    updateStats();
+});
+
+document.getElementById('agi-plus').addEventListener('click', function() {
+    playerStats.agi++;
+    playerStats.dodgeChance = playerStats.agi; // 1% dodge chance per AGI
+    updateStats();
+});
+
+document.getElementById('luck-plus').addEventListener('click', function() {
+    playerStats.luck++;
+    playerStats.resourceGain = playerStats.luck; // 1% resource gain per LUCK
+    updateStats();
+});
+
+// Update health bar when max health changes
+function updateHealthBar() {
+    const healthCounter = document.getElementById('health-counter');
+    const [currentHealth, ] = healthCounter.textContent.split('/').map(Number);
+    healthCounter.textContent = `${currentHealth}/${playerStats.maxHealth}`;
+
+    const healthBar = document.getElementById('health-bar');
+    const healthPercentage = (currentHealth / playerStats.maxHealth) * 100;
+    healthBar.style.width = `${healthPercentage}%`;
+}
+
+// Update mana bar when max mana changes
+function updateManaBar() {
+    const manaCounter = document.getElementById('mana-counter');
+    const [currentMana, ] = manaCounter.textContent.split('/').map(Number);
+    manaCounter.textContent = `${currentMana}/${playerStats.maxMana}`;
+
+    const manaBar = document.getElementById('mana-bar');
+    const manaPercentage = (currentMana / playerStats.maxMana) * 100;
+    manaBar.style.width = `${manaPercentage}%`;
+}
+
+// Initial update of stats display
+updateStats();

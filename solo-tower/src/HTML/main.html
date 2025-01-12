@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="../CSS/MainMenu.css">
     <link rel="stylesheet" href="../CSS/notifactions.css">
     <link rel="stylesheet" href="../CSS/resourcebox.css">
+    <link rel="stylesheet" href="../CSS/Stats.css">
     <link rel="stylesheet" href="../CSS/Upgrades.css">
     <link rel="stylesheet" href="../CSS/welcome.css">
 </head>
@@ -23,37 +24,85 @@
         <button id="start-game">Login</button>
     </div>
 
-    <div id="welcome-modal" class="modal" style="display: none;">
+    <div id="welcome-modal" class="modal">
         <div class="modal-content">
-            <p>Welcome to Solo Tower!</p>
-            <input type="text" id="player-name-input" placeholder="Enter your name" />
-            <button id="ok-button">Ok</button>
+        <h2>Welcome to Solo Tower!</h2>
+        <p>Do you wish to become a player?</p>
+        <div class="choice-container">
+        <button id="player-yes" class="choice-button">Yes</button>
+        <button id="player-no" class="choice-button">No</button>
+        </div>
+        <p id="danger" style="color: red; display: none;">Danger! There Is No Turning Back!</p>
+        <div id="name-input-container" style="display: none;">
+            <input type="text" id="player-name-input" placeholder="Enter your name">
+            <button id="ok-button">OK</button>
         </div>
     </div>
+    </div>
+    
 
     <div id="hud" style="display: none;">
         <p> <span id="player-name">Player</span> (Lv. <span id="player-level">1</span>)</p>
-        <div class="bar">
-            <label for="health-bar">Health: <span id="health-counter">100/100</span></label>
-            <progress id="health-bar" value="100" max="100"></progress>
-        </div>
-        <div class="bar">
-            <label for="mana-bar">Mana: <span id="mana-counter">100/100</span></label>
-            <progress id="mana-bar" value="100" max="100"></progress>
-        </div>
-        <div class="bar">
-            <label for="exp-bar">EXP: <span id="exp-counter">0/100</span></label>
-            <progress id="exp-bar" value="0" max="100"></progress>
-        </div>
+            <div class="bar-container">
+                <label for="health-bar">Health:</label>
+                <span id="health-counter">10/10</span>
+                <div class="health-bar-container">
+                    <div id="health-bar" class="bar"></div>
+                </div>
+            </div>
+            <div class="bar-container">
+                <label for="mana-bar">Mana:</label>
+                <span id="mana-counter">10/10</span>
+                <div class="mana-bar-container">
+                    <div id="mana-bar" class="bar"></div>
+                </div>
+            </div>
+            <div class="bar-container">
+                <label for="exp-bar">EXP:</label>
+                <span id="exp-counter">0/10</span>
+                <div class="exp-bar-container">
+                    <div id="exp-bar" class="bar"></div>
+                </div>
+            </div>        
     </div>
 
+    <div id="stats-box" class="stats-box" style="display: none;">
+            <h3>Player Stats</h3>        
+        <div class="stat">
+            <label for="vit">Vit:</label>
+            <span id="vit-value">1</span>
+            <button id="vit-plus" class="plus-button">+</button>
+        </div>
+        <div class="stat">
+            <label for="int">Int:</label>
+            <span id="int-value">1</span>
+            <button id="int-plus" class="plus-button">+</button>
+        </div>
+        <div class="stat">
+            <label for="str">Str:</label>
+            <span id="str-value">1</span>
+            <button id="str-plus" class="plus-button">+</button>
+        </div>
+        <div class="stat">
+            <label for="agi">Agi:</label>
+            <span id="agi-value">1</span>
+            <button id="agi-plus" class="plus-button">+</button>
+        </div>
+        <div class="stat">
+            <label for="luck">Luck:</label>
+            <span id="luck-value">1</span>
+            <button id="luck-plus" class="plus-button">+</button>
+        </div>
+    </div>
+    
+
     <div id="centralized-control" style="display: none;">
-        <button id="stats-button">Stats</button>
+        <button id="stats-button">Statistics</button>
         <button id="settings-button">Settings</button>
     </div>
 
     <div id="notifications" class="notifications" style="display: none;">
-        <button id="expand-notifications" class="expand-button">▲</button>
+        <button id="expand-notifications" class="expand-button">▲ Inbox</button>
         <div id="notifications-content" class="notifications-content">
             <!-- Future notifications will be appended here -->
         </div>
