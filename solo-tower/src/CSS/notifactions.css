@@ -143,3 +143,23 @@
 .yes-button:hover {
     background: linear-gradient(135deg, rgba(135, 206, 250, 0.7), rgba(173, 216, 230, 0.7)); /* Hover effect */
 }
+
+.retry-button {
+    background: linear-gradient(135deg, rgba(135, 206, 250, 0.5), rgba(173, 216, 230, 0.5)); /* Gradient background */
+    color: #ffffff; /* White text color */
+    padding: 5px 20px;
+    border: 3px solid;
+    border-image: linear-gradient(45deg, rgba(0, 0, 255, 0.8), rgba(0, 255, 255, 0.8)) 1;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Shadow for depth */
+    font-family: 'Ysabeau SC', serif; /* Updated font style */
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.retry-button:hover {
+    background: linear-gradient(135deg, rgba(135, 206, 250, 0.7), rgba(173, 216, 230, 0.7)); /* Hover effect */
+}

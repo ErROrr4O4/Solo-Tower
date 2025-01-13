@@ -1,3 +1,28 @@
+let playerLevel = 1;
+let currentExp = 0;
+let requiredExp = 10; // Initial required experience for level 1
+
+// Define global variables for other scripts
+let hitsReceived = 0;
+
+// Initial resource setup
+let gold = 0;
+let experience = 0;
+
+let playerStats = {
+    vit: 1,
+    int: 1,
+    str: 1,
+    agi: 1,
+    luck: 1,
+    maxHealth: 10, // Starting max health
+    maxMana: 10, // Starting max mana
+    damageReduction: 0,
+    dodgeChance: 0,
+    resourceGain: 0,
+    availableStatPoints: 0 // Initialize available stat points
+};
+
 document.getElementById('start-game').addEventListener('click', function() {
     const mainMenu = document.getElementById('main-menu');
     const welcomeModal = document.getElementById('welcome-modal');
@@ -92,11 +117,11 @@ function showNotification(message) {
     
     // Conditionally include the "YES" button for the tutorial notification
     if (message.includes('Do you wish to start the tutorial?')) {
-        notification.innerHTML = `${message}<button class="close-notification">✖</button>`;
+        notification.innerHTML = `${message}  <button class="close-notification">✖</button>`;
         notification.querySelector('.yes-button').addEventListener('click', function() {
             showNotification('Tutorial started!');
             notification.remove(); // Remove the message when "YES" is clicked
-            spawnEnemies(); // Start spawning enemies when "YES" is clicked
+            startEnemySpawn(); // Start enemy spawn after tutorial
         });
     } else {
         notification.innerHTML = `${message} <button class="close-notification">✖</button>`;
@@ -118,6 +143,8 @@ function showNotification(message) {
         notification.style.display = 'none'; // Hide the notification after 5 seconds
         notification.classList.add('stacked'); // Mark it as stacked
     }, 5000);
+
+    return notification; // Return the notification element
 }
 
 
@@ -211,12 +238,12 @@ function createChunks(enemy) {
 function applyDamage(damage) {
     // Update player's health
     const healthCounter = document.getElementById('health-counter');
-    const healthBar = document.getElementById('health-bar'); // Assuming there is a health bar element
     let [currentHealth, maxHealth] = healthCounter.textContent.split('/').map(Number);
     currentHealth = Math.max(0, currentHealth - damage); // Ensure health doesn't go below 0
     healthCounter.textContent = `${currentHealth}/${maxHealth}`;
     
     // Update health bar width
+    const healthBar = document.getElementById('health-bar');
     const healthPercentage = (currentHealth / maxHealth) * 100;
     healthBar.style.width = `${healthPercentage}%`;
     
@@ -227,45 +254,110 @@ function applyDamage(damage) {
         playerElement.classList.remove('flash');
     }, 500); // Duration of the flash effect
 
+    // Check for player death
+    if (currentHealth === 0) {
+        handlePlayerDeath();
+    }
 }
 
 
 
+let isPlayerDead = false; // Flag to track player's death status
+let retryNotificationShown = false; // Flag to track if retry notification has been shown
+
+function handlePlayerDeath() {
+    if (retryNotificationShown) {
+        return; // Do nothing if the retry notification has already been shown
+    }
+
+    isPlayerDead = true; // Set the player death flag
+    retryNotificationShown = true; // Set the retry notification flag
+    stopEnemySpawn(); // Stop enemy spawn
+    stopEnemyMovement(); // Stop enemies from moving
+    showNotification(`You died! Do you want to retry? <button class="retry-button">YES</button>`);
+    
+    // Event listener for retry button
+    document.querySelector('.retry-button').addEventListener('click', function() {
+        respawnPlayer();
+    });
+}
+
+function respawnPlayer() {
+    isPlayerDead = false; // Reset the player death flag
+    retryNotificationShown = false; // Reset the retry notification flag
+
+    // Remove the retry notification
+    const retryNotification = document.querySelector('.retry-button').parentElement;
+    retryNotification.remove();
+
+    updateHealthBar(true); // Restore health to max
+    updateManaBar(true); // Restore mana to max
+    
+    // Remove existing enemies
+    const enemies = document.querySelectorAll('.enemy');
+    enemies.forEach(enemy => enemy.remove());
+    
+    showNotification(`Player respawned successfully!`);
+    startEnemySpawn(); // Restart enemy spawn
+}
+
+
+
+
 function earnResources() {
+    if (isPlayerDead) {
+        return; // Do not earn resources if the player is dead
+    }
+
     gold += 10; // Amount of gold earned per enemy
-    experience += 5; // Amount of experience earned per enemy
+    currentExp += 5; // Amount of experience earned per enemy
     updateResources();
     updateExpBar(); // Update EXP bar after earning resources
 }
 
 function updateResources() {
     document.getElementById('gold-counter').textContent = `Gold: ${gold}`;
-    // Ensure that EXP counter text is correctly initialized if it doesn't exist
     if (!document.getElementById('exp-counter').textContent.includes('/')) {
-        document.getElementById('exp-counter').textContent = '0/10';
+        document.getElementById('exp-counter').textContent = `${currentExp}/${requiredExp}`;
     }
     updateExpBar();
 }
 
 function updateExpBar() {
     const expCounter = document.getElementById('exp-counter');
-    let [currentExp, maxExp] = expCounter.textContent.split('/').map(Number);
-    currentExp += 5; // Add the earned experience points
-    // If currentExp exceeds maxExp, handle level-up logic here (optional)
-    if (currentExp >= maxExp) {
-        currentExp = currentExp % maxExp; // Reset currentExp if it exceeds maxExp
+    const expBar = document.getElementById('exp-bar');
+    
+    // Level up logic
+    while (currentExp >= requiredExp) {
+        currentExp -= requiredExp;
+        levelUp();
     }
-    expCounter.textContent = `${currentExp}/${maxExp}`;
+    
+    expCounter.textContent = `${currentExp}/${requiredExp}`;
     
     // Update exp bar width
-    const expPercentage = (currentExp / maxExp) * 100;
-    const expBar = document.getElementById('exp-bar');
+    const expPercentage = (currentExp / requiredExp) * 100;
     expBar.style.width = `${expPercentage}%`;
 }
 
-// Initial resource setup
-let gold = 0;
-let experience = 0;
+function levelUp() {
+    playerLevel++;
+    document.getElementById('player-level').textContent = playerLevel; // Update player level display
+    playerStats.availableStatPoints++; // Grant 1 stat point per level up
+    requiredExp *= 2; // Double the required experience for next level
+    
+    // Increase max health and mana by 10
+    playerStats.maxHealth += 10;
+    playerStats.maxMana += 10;
+    
+    updateHealthBar(true); // Update the health bar to reflect new max health and restore health
+    updateManaBar(true); // Update the mana bar to reflect new max mana and restore mana
+
+    showNotification(`Congratulations! You've reached level ${playerLevel}.`);
+    showNotification(`You've gained 1 stat point.`);
+    updateStats(); // Update stats display to reflect available stat points
+}
+
 
 // Call updateResources initially to set the counters
 updateResources();
@@ -273,7 +365,7 @@ updateResources();
 
 // Debugging: Log resource updates
 function debugEarnResources() {
-    console.log('Earned resources:', { gold, experience });
+    console.log('Earned resources:', { gold, currentExp });
 }
 
 // Update the moveEnemy function to debug earnResources
@@ -305,8 +397,21 @@ function moveEnemy(enemy) {
 }
 
 
-function spawnEnemies() {
-    setInterval(createEnemy, 1000); // Spawn a new enemy every second
+let enemySpawnInterval; // Variable to store the enemy spawn interval
+
+function startEnemySpawn() {
+    enemySpawnInterval = setInterval(createEnemy, 2000); // Adjust spawn interval as needed
+}
+
+function stopEnemySpawn() {
+    clearInterval(enemySpawnInterval);
+}
+
+function stopEnemyMovement() {
+    const enemies = document.querySelectorAll('.enemy');
+    enemies.forEach(enemy => {
+        enemy.style.transform = 'none';
+    });
 }
 
 // Function to unlock upgrades based on player level or points
@@ -331,23 +436,6 @@ function unlockUpgrade(upgradeId) {
     upgrade.classList.add('unlocked');
 }
 
-// Call checkForUpgrades whenever the player levels up or earns points
-// Example: checkForUpgrades(); // Call this function at appropriate times
-
-// Initial player stats
-let playerStats = {
-    vit: 1,
-    int: 1,
-    str: 1,
-    agi: 1,
-    luck: 1,
-    maxHealth: 10,
-    maxMana: 10,
-    damageReduction: 0,
-    dodgeChance: 0,
-    resourceGain: 0
-};
-
 // Update stats display
 function updateStats() {
     document.getElementById('vit-value').textContent = playerStats.vit;
@@ -355,45 +443,79 @@ function updateStats() {
     document.getElementById('str-value').textContent = playerStats.str;
     document.getElementById('agi-value').textContent = playerStats.agi;
     document.getElementById('luck-value').textContent = playerStats.luck;
+    document.getElementById('available-stat-points').textContent = `(${playerStats.availableStatPoints})`; // Update available stat points display
 }
 
-// Event listeners for plus buttons
+
 document.getElementById('vit-plus').addEventListener('click', function() {
-    playerStats.vit++;
-    playerStats.maxHealth += 10;
-    updateStats();
-    updateHealthBar(); // Update the health bar
+    if (playerStats.availableStatPoints > 0) {
+        playerStats.vit++;
+        playerStats.maxHealth += 10;
+        playerStats.availableStatPoints--;
+        updateStats();
+        updateHealthBar(true); // Update the health bar
+    } else {
+        showNotification(`No stat points available to increase Vit.`);
+    }
 });
 
 document.getElementById('int-plus').addEventListener('click', function() {
-    playerStats.int++;
-    playerStats.maxMana += 10;
-    updateStats();
-    updateManaBar(); // Update the mana bar
+    if (playerStats.availableStatPoints > 0) {
+        playerStats.int++;
+        playerStats.maxMana += 10;
+        playerStats.availableStatPoints--;
+        updateStats();
+        updateManaBar(true); // Update the mana bar
+    } else {
+        showNotification(`No stat points available to increase Int.`);
+    }
 });
 
 document.getElementById('str-plus').addEventListener('click', function() {
-    playerStats.str++;
-    playerStats.damageReduction = playerStats.str; // 1% damage reduction per STR
-    updateStats();
+    if (playerStats.availableStatPoints > 0) {
+        playerStats.str++;
+        playerStats.damageReduction = playerStats.str; // 1% damage reduction per STR
+        playerStats.availableStatPoints--;
+        updateStats();
+    } else {
+        showNotification(`No stat points available to increase Str.`);
+    }
 });
 
 document.getElementById('agi-plus').addEventListener('click', function() {
-    playerStats.agi++;
-    playerStats.dodgeChance = playerStats.agi; // 1% dodge chance per AGI
-    updateStats();
+    if (playerStats.availableStatPoints > 0) {
+        playerStats.agi++;
+        playerStats.dodgeChance = playerStats.agi; // 1% dodge chance per AGI
+        playerStats.availableStatPoints--;
+        updateStats();
+    } else {
+        showNotification(`No stat points available to increase Agi.`);
+    }
 });
 
 document.getElementById('luck-plus').addEventListener('click', function() {
-    playerStats.luck++;
-    playerStats.resourceGain = playerStats.luck; // 1% resource gain per LUCK
-    updateStats();
+    if (playerStats.availableStatPoints > 0) {
+        playerStats.luck++;
+        playerStats.resourceGain = playerStats.luck; // 1% resource gain per LUCK
+        playerStats.availableStatPoints--;
+        updateStats();
+    } else {
+        showNotification(`No stat points available to increase Luck.`);
+    }
 });
 
+
 // Update health bar when max health changes
-function updateHealthBar() {
+function updateHealthBar(restore = false) {
     const healthCounter = document.getElementById('health-counter');
-    const [currentHealth, ] = healthCounter.textContent.split('/').map(Number);
+    let [currentHealth, ] = healthCounter.textContent.split('/').map(Number);
+    
+    // If restore is true, set current health to max health
+    if (restore) {
+        currentHealth = playerStats.maxHealth;
+    }
+    
+
     healthCounter.textContent = `${currentHealth}/${playerStats.maxHealth}`;
 
     const healthBar = document.getElementById('health-bar');
@@ -401,16 +523,22 @@ function updateHealthBar() {
     healthBar.style.width = `${healthPercentage}%`;
 }
 
-// Update mana bar when max mana changes
-function updateManaBar() {
+function updateManaBar(restore = false) {
     const manaCounter = document.getElementById('mana-counter');
-    const [currentMana, ] = manaCounter.textContent.split('/').map(Number);
+    let [currentMana, ] = manaCounter.textContent.split('/').map(Number);
+    
+    // If restore is true, set current mana to max mana
+    if (restore) {
+        currentMana = playerStats.maxMana;
+    }
+   
     manaCounter.textContent = `${currentMana}/${playerStats.maxMana}`;
 
     const manaBar = document.getElementById('mana-bar');
     const manaPercentage = (currentMana / playerStats.maxMana) * 100;
     manaBar.style.width = `${manaPercentage}%`;
 }
+
 
 // Initial update of stats display
 updateStats();
