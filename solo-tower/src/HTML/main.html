@@ -67,7 +67,7 @@
     </div>
 
     <div id="stats-box" class="stats-box" style="display: none;">
-        <h3>Player Stats <span id="available-stat-points">(0)</span></h3> <!-- Display available stat points -->
+        <h3>Player Stats <span id="available-stat-points">(1)</span></h3> <!-- Display available stat points -->
         <div class="stat">
             <label for="vit">Vit:</label>
             <span id="vit-value">1</span>
@@ -120,7 +120,12 @@
 
     <div class="game-container" id="game-container" style="display: none;">
         <div class="player"></div>
+        <div id="dead-text" class="dead-text" style="display: none;">DEAD</div>
     </div>
+
+    <!-- Respawn button initially hidden -->
+    <button id="respawn-button" class="respawn-button" style="display: none;">Respawn</button>
+    
     
     <div id="upgrade-tree" class="upgrade-tree">
         <h3>Upgrade Tree</h3>
@@ -137,10 +142,11 @@
     
     
     
-
-    
-
+    <script src="../JS/enemy.js"></script>
+    <script src="../JS/location.js"></script>
     <script src="../JS/main.js"></script>
     <script src="../JS/MainMenu.js"></script>
+    <script src="../JS/player.js"></script>
+    <script src="../JS/stats.js"></script>
 </body>
 </html>
