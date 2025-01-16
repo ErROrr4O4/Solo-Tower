@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="../CSS/main.css">
     <link rel="stylesheet" href="../CSS/MainMenu.css">
     <link rel="stylesheet" href="../CSS/notifactions.css">
+    <link rel="stylesheet" href="../CSS/PassiveSkills.css">
     <link rel="stylesheet" href="../CSS/resourcebox.css">
     <link rel="stylesheet" href="../CSS/Stats.css">
     <link rel="stylesheet" href="../CSS/Upgrades.css">
@@ -95,6 +96,13 @@
         </div>
     </div>
     
+    <div id="passive-skills-box" class="passive-skills-box" style="display: none;">
+        <h3>Passive Skills</h3>
+        <div id="passive-skills-list" class="passive-skills-list">
+            <!-- Passive skills will be added here -->
+        </div>
+    </div>
+    
 
     <div id="centralized-control" style="display: none;">
         <button id="stats-button">Statistics</button>
@@ -121,6 +129,7 @@
     <div class="game-container" id="game-container" style="display: none;">
         <div class="player"></div>
         <div id="dead-text" class="dead-text" style="display: none;">DEAD</div>
+        <div class="boss" style="display: none;"></div>
     </div>
 
     <!-- Respawn button initially hidden -->
@@ -141,11 +150,12 @@
     </div>
     
     
-    
+    <script src="../JS/boss.js"></script>
     <script src="../JS/enemy.js"></script>
     <script src="../JS/location.js"></script>
     <script src="../JS/main.js"></script>
     <script src="../JS/MainMenu.js"></script>
+    <script src="../JS/PassiveSkills.js"></script>
     <script src="../JS/player.js"></script>
     <script src="../JS/stats.js"></script>
 </body>

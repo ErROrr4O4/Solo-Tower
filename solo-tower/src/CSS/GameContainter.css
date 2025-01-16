@@ -23,7 +23,7 @@
 
 }
 
-.player, .enemy {
+.player, .enemy , .boss {
     position: absolute;
     border-radius: 50%;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Shadow for depth */
@@ -59,6 +59,13 @@
     width: 10px;
     height: 10px;
 }
+
+.boss {
+     background-color: rgb(104, 1, 1);
+     width: 30px;
+     height: 30px;
+     transition: left 1s ease, top 1s ease;
+ }
 
 @keyframes borderAnimation {
     0% {

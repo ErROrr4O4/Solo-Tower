@@ -25,6 +25,7 @@ document.getElementById('ok-button').addEventListener('click', function() {
     const hud = document.getElementById('hud'); // Reference the HUD element
     const notifications = document.getElementById('notifications');
     const playerStats = document.getElementById('stats-box');
+    const passivebox = document.getElementById('passive-skills-box'); // Reference the gold box element
     const buffsDebuffsBox = document.getElementById('buffs-debuffs-box'); // Reference the buffs/debuffs box element
     const centralizedControl = document.getElementById('centralized-control'); // Reference the centralized control element
     const locationBox = document.getElementById('location-box'); // Reference the location box element
@@ -48,6 +49,7 @@ document.getElementById('ok-button').addEventListener('click', function() {
     hud.style.display = 'block'; // Display the HUD with player name, level, health, mana, and exp bars
     notifications.style.display = 'block'; // Display the notifications box
     playerStats.style.display = 'block'; // Display the notifications box
+    passivebox.style.display = 'block'; // Display the notifications box
     buffsDebuffsBox.style.display = 'block'; // Show the box
     centralizedControl.style.display = 'flex'; // Show the centralized controls
     goldBox.style.display = 'block'; // Show the gold box

@@ -6,6 +6,8 @@ let requiredExp = 10; // Initial required experience for level 1
 
 // Define global variables for other scripts
 let hitsReceived = 0;
+let firstDeathMessageShown = false; // Flag to track if the first death message has been shown
+
 
 // Initial resource setup
 let gold = 0;
@@ -63,6 +65,7 @@ function handlePlayerDeath() {
     isPlayerDead = true; // Set the player death flag
     retryNotificationShown = true; // Set the retry notification flag
     stopEnemySpawn(); // Stop enemy spawn
+    stopBossSpawn(); // Stop boss spawn
     stopEnemyMovement(); // Stop enemies from moving
 
     // Show the respawn button
@@ -77,10 +80,17 @@ function handlePlayerDeath() {
     const playerElement = document.querySelector('.player');
     playerElement.classList.add('dead');
 
+    // Show first death message if it hasn't been shown yet
+    if (!firstDeathMessageShown) {
+        showNotification(`You died, it looks like you can't even take a single hit from a single monster. Now that I take a look at your stats, you are the weakest player I've ever seen so far...you have 1 stat available. How about investing it into vitality?`);
+        firstDeathMessageShown = true; // Set the flag to true
+    }
+
     // Only add event listener once
     respawnButton.removeEventListener('click', respawnPlayer);
     respawnButton.addEventListener('click', respawnPlayer);
 }
+
 
 
 

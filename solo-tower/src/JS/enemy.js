@@ -1,9 +1,10 @@
 let enemySpawnInterval; // Variable to store the enemy spawn interval
+let enemiesDefeated = 0; // Counter for enemies defeated
 
 function createEnemy() {
     if (isPlayerDead) {
-         return; // Do not spawn enemies if the player is dead 
-         }
+        return; // Do not spawn enemies if the player is dead 
+    }
     const gameContainer = document.querySelector('.game-container');
     const enemy = document.createElement('div');
     enemy.className = 'enemy';
@@ -44,17 +45,14 @@ function createChunks(enemy) {
     for (let i = 0; i < 10; i++) { // Create 10 chunks
         const chunk = document.createElement('div');
         chunk.className = 'chunk';
-        // Random direction and distance for each chunk
         const angle = Math.random() * 2 * Math.PI;
         const distance = Math.random() * 50;
         chunk.style.setProperty('--x', `${Math.cos(angle) * distance}px`);
         chunk.style.setProperty('--y', `${Math.sin(angle) * distance}px`);
-        // Position chunks at enemy's location
         chunk.style.left = `${enemyRect.left - containerRect.left + enemyRect.width / 2}px`;
         chunk.style.top = `${enemyRect.top - containerRect.top + enemyRect.height / 2}px`;
         chunks.push(chunk);
         gameContainer.appendChild(chunk);
-
     }
     return chunks;
 }
@@ -82,10 +80,17 @@ function moveEnemy(enemy) {
         }, 1000); // Duration of the explosion and fade-out effect
         applyDamage(10); // Apply damage to the player
         earnResources(); // Earn resources when enemy is removed
-        debugEarnResources(); // Log resource updates
+
+        // Increment enemy defeat counter
+        enemiesDefeated++;
+        console.log(`Enemies defeated: ${enemiesDefeated}`);
+        
+        // Spawn boss if 10 enemies are defeated and boss is not already spawned
+        if (enemiesDefeated % 10 === 0){
+            startBossSpawn();
+        }
     }, duration);
 }
-
 
 function startEnemySpawn() {
     if (!enemySpawnInterval) {
@@ -96,6 +101,7 @@ function startEnemySpawn() {
 function stopEnemySpawn() {
     clearInterval(enemySpawnInterval);
     enemySpawnInterval = null; // Reset the interval variable
+    enemiesDefeated = 0; // Reset the enemy defeat counter
 }
 
 function stopEnemyMovement() {
