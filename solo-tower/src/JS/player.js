@@ -65,7 +65,6 @@ function handlePlayerDeath() {
     isPlayerDead = true; // Set the player death flag
     retryNotificationShown = true; // Set the retry notification flag
     stopEnemySpawn(); // Stop enemy spawn
-    stopBossSpawn(); // Stop boss spawn
     stopEnemyMovement(); // Stop enemies from moving
 
     // Show the respawn button

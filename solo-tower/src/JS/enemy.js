@@ -86,8 +86,9 @@ function moveEnemy(enemy) {
         console.log(`Enemies defeated: ${enemiesDefeated}`);
         
         // Spawn boss if 10 enemies are defeated and boss is not already spawned
-        if (enemiesDefeated % 10 === 0){
-            startBossSpawn();
+        if (enemiesDefeated >= 10) {
+            createBoss();
+            enemiesDefeated = 0; // Reset enemy count after boss spawn
         }
     }, duration);
 }
@@ -101,7 +102,6 @@ function startEnemySpawn() {
 function stopEnemySpawn() {
     clearInterval(enemySpawnInterval);
     enemySpawnInterval = null; // Reset the interval variable
-    enemiesDefeated = 0; // Reset the enemy defeat counter
 }
 
 function stopEnemyMovement() {

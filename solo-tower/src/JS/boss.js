@@ -1,55 +1,91 @@
-let bossSpawned = false; // Variable to check if the boss is already spawned
+let boss; // To store the current boss element
+let isBossAlive = false; // To track if the boss is alive
 
-let bossMonster = { 
-    name: 'Regeneron',
-    health: 500, 
-    maxHealth: 500, 
-    attack: 25, 
-    regenRate: 10, // Health regen rate per second 
-    speed: 2, // Boss movement speed 
-    };
-
+// Function to create the boss at a random edge
 function createBoss() {
-    if (!bossSpawned) {
-        const gameContainer = document.querySelector('.game-container');
-        const boss = document.createElement('div');
-        boss.className = 'boss';
-
-        const randomEdge = Math.floor(Math.random() * 4);
-        switch (randomEdge) {
-            case 0: // Top edge
-                boss.style.top = '0';
-                boss.style.left = `${Math.random() * 100}%`;
-                break;
-            case 1: // Right edge
-                boss.style.top = `${Math.random() * 100}%`;
-                boss.style.left = '100%';
-                break;
-            case 2: // Bottom edge
-                boss.style.top = '100%';
-                boss.style.left = `${Math.random() * 100}%`;
-                break;
-            case 3: // Left edge
-                boss.style.top = `${Math.random() * 100}%`;
-                boss.style.left = '0';
-                break;
-        }
-
-        gameContainer.appendChild(boss);
-
-        // Move the boss toward the player
-        moveBoss(boss);
-
-        // Set bossSpawned to true
-        bossSpawned = true;
+    if (isPlayerDead) {
+        return; // Do not spawn the boss if the player is dead
     }
+
+    const gameContainer = document.querySelector('.game-container');
+    boss = document.createElement('div');
+    boss.className = 'boss';
+
+    const randomEdge = Math.floor(Math.random() * 4);
+    switch (randomEdge) {
+        case 0: // Top edge
+            boss.style.top = '0';
+            boss.style.left = `${Math.random() * 100}%`;
+            break;
+        case 1: // Right edge
+            boss.style.top = `${Math.random() * 100}%`;
+            boss.style.left = '100%';
+            break;
+        case 2: // Bottom edge
+            boss.style.top = '100%';
+            boss.style.left = `${Math.random() * 100}%`;
+            break;
+        case 3: // Left edge
+            boss.style.top = `${Math.random() * 100}%`;
+            boss.style.left = '0';
+            break;
+    }
+
+    gameContainer.appendChild(boss);
+
+    // Start moving the boss towards the player
+    moveBoss();
 }
 
-function createBossChunks(boss) {
+// Function to move the boss toward the player
+function moveBoss() {
+    if (!boss || isPlayerDead) return; // Prevent movement if no boss or player is dead
+
+    const player = document.querySelector('.player');
+    const playerRect = player.getBoundingClientRect();
+    const bossRect = boss.getBoundingClientRect();
+
+    const deltaX = playerRect.left - bossRect.left;
+    const deltaY = playerRect.top - bossRect.top;
+    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+    const duration = 3000; // Duration for the boss to reach the player
+
+    // Move the boss smoothly towards the player using CSS transitions
+    boss.style.transition = `transform ${duration}ms linear`;
+    boss.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+
+    // After the boss reaches the player, trigger explosion and respawn
+    setTimeout(() => {
+    
+            // Create chunks for explosion effect
+            const chunks = createChunks(boss);
+
+            // Remove the boss after it reaches the player
+            boss.remove();
+
+            // Remove chunks after explosion
+            setTimeout(() => {
+                chunks.forEach(chunk => chunk.remove()); // Remove chunks after explosion
+            }, 1000); // Duration of explosion and fade-out effect
+
+            // Apply damage to the player when touched by the boss
+            applyDamage(10);
+
+            // Mark the boss as not alive
+            isBossAlive = false;
+
+            // Respawn the boss near the player
+            respawnBossNearPlayer();
+        
+    }, duration);
+}
+
+// Function to create chunks when the boss is destroyed (explosion effect)
+function createChunks(boss) {
     const chunks = [];
     const gameContainer = document.querySelector('.game-container');
     const bossRect = boss.getBoundingClientRect();
-    const playerRect = document.querySelector('.player').getBoundingClientRect();
     const containerRect = gameContainer.getBoundingClientRect();
 
     for (let i = 0; i < 10; i++) { // Create 10 chunks
@@ -67,87 +103,10 @@ function createBossChunks(boss) {
     return chunks;
 }
 
-function moveBoss(boss) {
-    const player = document.querySelector('.player');
-    const playerRect = player.getBoundingClientRect();
-    const bossRect = boss.getBoundingClientRect();
-
-    const deltaX = playerRect.left - bossRect.left;
-    const deltaY = playerRect.top - bossRect.top;
-    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-
-    const duration = 2000; // Duration for the boss to reach the player
-
-    boss.style.transition = `transform ${duration}ms linear`;
-    boss.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
-
-    // Apply damage and create explosion effect when boss reaches the player
-    setTimeout(() => {
-        const chunks = createBossChunks(boss); // Create chunks for explosion
-        setTimeout(() => {
-            chunks.forEach(chunk => chunk.remove()); // Remove chunks after explosion
-        }, 1000); // Duration of the explosion and fade-out effect
-        applyDamage(10); // Apply damage to the player
-
-        if (bossMonster.health <= 0) {
-            console.log(`${bossMonster.name} has been defeated.`);
-            bossSpawned = false;
-        } else {
-            respawnBossNearPlayer(); // Respawn boss near the player
-        }
-    }, duration);
-}
-
-
+// Function to respawn the boss near the player after it is destroyed
 function respawnBossNearPlayer() {
-    const bossElement = document.querySelector('.boss');
+    if (isBossAlive) return; // Prevent respawning if boss is still alive
 
-    if (bossElement) {
-        const playerElement = document.querySelector('.player');
-        const gameContainer = document.querySelector('.game-container');
-        const gameRect = gameContainer.getBoundingClientRect();
-        const playerRect = playerElement.getBoundingClientRect();
-
-        // Set the radius within which the boss should respawn
-        const radius = 150;
-
-        // Generate random angle and distance
-        const angle = Math.random() * 2 * Math.PI;
-        const distance = Math.random() * radius;
-
-        // Calculate new position for the boss
-        let spawnX = playerRect.left + distance * Math.cos(angle);
-        let spawnY = playerRect.top + distance * Math.sin(angle);
-
-        // Ensure the boss stays within the game container
-        spawnX = Math.max(gameRect.left, Math.min(spawnX, gameRect.right - bossElement.clientWidth));
-        spawnY = Math.max(gameRect.top, Math.min(spawnY, gameRect.bottom - bossElement.clientHeight));
-
-        // Apply transition
-        bossElement.style.transition = 'left 1s ease, top 1s ease';
-
-        // Position the boss at the calculated coordinates
-        bossElement.style.left = `${spawnX}px`;
-        bossElement.style.top = `${spawnY}px`;
-
-        console.log(`${bossMonster.name} respawned near the player with ${bossMonster.health} health.`);
-    } else {
-        console.error("Boss element not found in the DOM.");
-    }
-}
-
-
-function startBossSpawn() {
-    if (!bossSpawned) {
-        createBoss(); // Create and spawn the boss
-    }
-}
-
-function stopBossSpawn() {
-    bossSpawned = false;
-}
-
-function stopBossMovement() {
-    const boss = document.querySelector('.boss');
-    boss.style.transition = 'none';
+    // Call the original createBoss function to respawn the boss
+    createBoss();
 }

@@ -61,11 +61,10 @@
 }
 
 .boss {
-     background-color: rgb(104, 1, 1);
-     width: 30px;
-     height: 30px;
-     transition: left 1s ease, top 1s ease;
- }
+    width: 30px; /* Adjust size */
+    height: 30px; /* Adjust size */
+    background-color: rgb(104, 1, 1); /* Boss color */
+}
 
 @keyframes borderAnimation {
     0% {
