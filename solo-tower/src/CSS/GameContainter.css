@@ -66,6 +66,39 @@
     background-color: rgb(104, 1, 1); /* Boss color */
 }
 
+.boss-health-bar {
+    display: none; /* Initially hide the health bar */
+    position: absolute;
+    top: 10px; /* Adjust based on your game layout */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 20px;
+    background-color: #555; /* Background color of the health bar */
+    border: 1px solid #000;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.boss-health-bar-inner {
+    height: 100%;
+    background-color: #f00; /* Color of the health bar */
+    width: 100%; /* Full width for max health */
+    transition: width 0.5s ease; /* Smooth transition for health changes */
+}
+
+.boss-health-text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    color: #fff; /* Text color */
+    font-weight: bold;
+    line-height: 20px; /* Align text vertically */
+}
+
+
 @keyframes borderAnimation {
     0% {
         border-image: linear-gradient(45deg, rgba(0, 0, 255, 0.8), rgba(0, 255, 255, 0.8)) 1;

@@ -11,3 +11,8 @@ function changePlayerLocation(newLocation) {
     // Additional logic for changing location, if any
     console.log(`Player has moved to ${newLocation}`);
 }
+
+function getCurrentPlayerLocation() {
+    const locationNameElement = document.getElementById('location-name');
+    return locationNameElement.textContent;
+}

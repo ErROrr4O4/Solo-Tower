@@ -87,7 +87,8 @@ function moveEnemy(enemy) {
         
         // Spawn boss if 10 enemies are defeated and boss is not already spawned
         if (enemiesDefeated >= 10) {
-            createBoss();
+            const playerLocation = getCurrentPlayerLocation(); // Get the player's current location
+            createBoss(playerLocation);
             enemiesDefeated = 0; // Reset enemy count after boss spawn
         }
     }, duration);

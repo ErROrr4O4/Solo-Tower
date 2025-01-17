@@ -55,6 +55,7 @@ function applyDamage(damage) {
     if (currentHealth === 0) {
         handlePlayerDeath();
     }
+
 }
 
 function handlePlayerDeath() {
